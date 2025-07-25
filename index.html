@@ -36,10 +36,15 @@
     }
 
     function submitForm() {
-      const nick = document.getElementById("nick").value;
-      const problem = document.getElementById("problem").value;
+      const nick = document.getElementById("nick").value.trim();
+      const problem = document.getElementById("problem").value.trim();
 
-      fetch("https://TWOJ-ADRES-N8N/webhook/formularz-ai", {
+      if (!nick || !problem) {
+        alert("Uzupełnij wszystkie pola!");
+        return;
+      }
+
+      fetch("https://michu2115.app.n8n.cloud/webhook-test/formularz-ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nick, problem_description: problem })
