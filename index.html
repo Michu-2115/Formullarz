@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Formularz AI</title>
+  <style>
+    body { font-family: sans-serif; max-width: 500px; margin: auto; padding: 2em; }
+    .step { display: none; }
+    .step.active { display: block; }
+    button { margin-top: 1em; }
+  </style>
+</head>
+<body>
+  <h2>Formularz AI – Pomysł pracownika</h2>
+
+  <div class="step active" id="step1">
+    <label>Podaj swój nick:</label><br>
+    <input type="text" id="nick"><br>
+    <button onclick="nextStep()">Dalej</button>
+  </div>
+
+  <div class="step" id="step2">
+    <label>Opisz swój pomysł/problem:</label><br>
+    <textarea id="problem" rows="5" cols="40"></textarea><br>
+    <button onclick="submitForm()">Wyślij</button>
+  </div>
+
+  <div class="step" id="thanks">
+    <h3>Dziękujemy! Twój pomysł został przesłany ✅</h3>
+  </div>
+
+  <script>
+    function nextStep() {
+      document.getElementById("step1").classList.remove("active");
+      document.getElementById("step2").classList.add("active");
+    }
+
+    function submitForm() {
+      const nick = document.getElementById("nick").value;
+      const problem = document.getElementById("problem").value;
+
+      fetch("https://TWOJ-ADRES-N8N/webhook/formularz-ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nick, problem_description: problem })
+      })
+      .then(() => {
+        document.getElementById("step2").classList.remove("active");
+        document.getElementById("thanks").classList.add("active");
+      })
+      .catch(err => {
+        alert("Błąd przy wysyłaniu danych");
+        console.error(err);
+      });
+    }
+  </script>
+</body>
+</html>
